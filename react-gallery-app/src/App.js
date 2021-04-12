@@ -7,6 +7,7 @@ import Nav from "./components/Nav";
 import apiKey from "./config";
 import { BrowserRouter, Route } from "react-router-dom";
 import axios from "axios";
+import Cats from "./components/Cats";
 
 class App extends Component {
   constructor() {
@@ -16,26 +17,34 @@ class App extends Component {
     };
   }
   componentDidMount() {
+    this.performSearch();
+  }
+
+  performSearch = (query = "city") => {
     axios
       .get(
-        `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=Dogs&per_page=24&format=json&nojsoncallback=1`
+        `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${query}&per_page=24&format=json&nojsoncallback=1`
       )
       .then((responseData) => {
-        this.setState({ pictures: responseData.data.photos });
+        this.setState({ pictures: responseData.data.photos.photo });
       })
       .catch((error) => {
         console.log("Error fetching and parsin data", error);
       });
-  }
+  };
 
   render() {
     return (
       <BrowserRouter>
-        <SearchForm />
+        <SearchForm onSearch={this.performSearch} />
         <Nav />
         <Route
           path="/"
-          render={() => <PhotoContainer pictures={this.state.pictures.photo} />}
+          render={() => <PhotoContainer pictures={this.state.pictures} />}
+        />
+        <Route
+          path="/Cats"
+          render={() => <Cats pictures={this.state.pictures} />}
         />
       </BrowserRouter>
     );
