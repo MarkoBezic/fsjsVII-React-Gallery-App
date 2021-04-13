@@ -10,6 +10,7 @@ import axios from "axios";
 import Cats from "./components/Cats";
 import Dogs from "./components/Dogs";
 import Computers from "./components/Computers";
+import NotFound from "./components/NotFound";
 
 class App extends Component {
   constructor() {
@@ -71,6 +72,7 @@ class App extends Component {
               />
             )}
           />
+
           <Route
             path="/cats"
             render={() => <Cats pictures={this.state.catPics} title={"Cats"} />}
@@ -88,6 +90,20 @@ class App extends Component {
               />
             )}
           />
+          <Route
+            exact
+            path="/:searchText"
+            render={(props) => {
+              this.performSearch(props.match.params.searchText);
+              return (
+                <PhotoContainer
+                  pictures={this.state.pictures}
+                  title={this.state.queryTitle}
+                />
+              );
+            }}
+          />
+          <Route component={NotFound} />
         </Switch>
       </BrowserRouter>
     );
