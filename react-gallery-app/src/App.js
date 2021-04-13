@@ -19,6 +19,7 @@ class App extends Component {
       catPics: [],
       dogPics: [],
       computerPics: [],
+      queryTitle: "Results",
     };
   }
   componentDidMount() {
@@ -28,7 +29,7 @@ class App extends Component {
     this.performSearch("computers");
   }
 
-  performSearch = (query = "buildings") => {
+  performSearch = (query = "Photos") => {
     axios
       .get(
         `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${query}&per_page=24&format=json&nojsoncallback=1`
@@ -40,7 +41,10 @@ class App extends Component {
           ? this.setState({ dogPics: responseData.data.photos.photo })
           : query === "computers"
           ? this.setState({ computerPics: responseData.data.photos.photo })
-          : this.setState({ pictures: responseData.data.photos.photo });
+          : this.setState({
+              pictures: responseData.data.photos.photo,
+              queryTitle: query,
+            });
       })
       .catch((error) => {
         console.log("Error fetching and parsin data", error);
@@ -48,6 +52,7 @@ class App extends Component {
   };
 
   render() {
+    console.log(this.state.queryTitle);
     return (
       <BrowserRouter>
         <SearchForm onSearch={this.performSearch} />
@@ -56,19 +61,29 @@ class App extends Component {
           <Route
             exact
             path="/"
-            render={() => <PhotoContainer pictures={this.state.pictures} />}
+            render={() => (
+              <PhotoContainer
+                pictures={this.state.pictures}
+                title={this.state.queryTitle}
+              />
+            )}
           />
           <Route
             path="/cats"
-            render={() => <Cats pictures={this.state.catPics} />}
+            render={() => <Cats pictures={this.state.catPics} title={"Cats"} />}
           />
           <Route
             path="/dogs"
-            render={() => <Dogs pictures={this.state.dogPics} />}
+            render={() => <Dogs pictures={this.state.dogPics} title={"Dogs"} />}
           />
           <Route
             path="/computers"
-            render={() => <Computers pictures={this.state.computerPics} />}
+            render={() => (
+              <Computers
+                pictures={this.state.computerPics}
+                title={"Computers"}
+              />
+            )}
           />
         </Switch>
       </BrowserRouter>
