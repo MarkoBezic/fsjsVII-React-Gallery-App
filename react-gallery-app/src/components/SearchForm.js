@@ -13,7 +13,7 @@ class SearchForm extends Component {
   //Set route back to match searchText and send searchText to performSearch and clear search bar
   handleSubmit = (e) => {
     e.preventDefault();
-    this.props.history.push(`/${this.state.searchText}`);
+    this.props.history.push(`/search/${this.state.searchText}`);
     this.props.onSearch(this.state.searchText);
     e.currentTarget.reset();
   };

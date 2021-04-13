@@ -7,9 +7,6 @@ import Nav from "./components/Nav";
 import apiKey from "./config";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import axios from "axios";
-import Cats from "./components/Cats";
-import Dogs from "./components/Dogs";
-import Computers from "./components/Computers";
 import NotFound from "./components/NotFound";
 
 class App extends Component {
@@ -25,6 +22,7 @@ class App extends Component {
   }
 
   componentDidMount() {
+    this.performSearch();
     //load default pics
     this.performSearch();
     //load pics for navigation pages
@@ -65,34 +63,48 @@ class App extends Component {
           <Route
             exact
             path="/"
-            render={() => (
-              <PhotoContainer
-                pictures={this.state.pictures}
-                title={this.state.queryTitle}
-              />
-            )}
+            render={() => {
+              this.performSearch();
+              return this.state.pictures.length < 1 ? (
+                <h3>Loading...</h3>
+              ) : (
+                <PhotoContainer
+                  pictures={this.state.pictures}
+                  title={this.state.queryTitle}
+                />
+              );
+            }}
           />
 
           <Route
             path="/cats"
-            render={() => <Cats pictures={this.state.catPics} title={"Cats"} />}
-          />
-          <Route
-            path="/dogs"
-            render={() => <Dogs pictures={this.state.dogPics} title={"Dogs"} />}
-          />
-          <Route
-            path="/computers"
             render={() => (
-              <Computers
-                pictures={this.state.computerPics}
-                title={"Computers"}
-              />
+              <PhotoContainer pictures={this.state.catPics} title={"Cats"} />
             )}
           />
           <Route
+            path="/dogs"
+            render={() => {
+              return (
+                <PhotoContainer pictures={this.state.dogPics} title={"Dogs"} />
+              );
+            }}
+          />
+          <Route
+            path="/computers"
+            render={() => {
+              return (
+                <PhotoContainer
+                  pictures={this.state.computerPics}
+                  title={"Computers"}
+                />
+              );
+            }}
+          />
+
+          <Route
             exact
-            path="/:searchText"
+            path="/search/:searchText"
             render={(props) => {
               this.performSearch(props.match.params.searchText);
               return this.state.queryTitle !== props.match.params.searchText ? (
