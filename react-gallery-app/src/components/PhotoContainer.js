@@ -2,7 +2,6 @@ import React from "react";
 import Photo from "./Photo";
 
 export default function PhotoContainer({ pictures, title }) {
-  console.log(title);
   return (
     <div className="photo-container">
       <h2>{title}</h2>

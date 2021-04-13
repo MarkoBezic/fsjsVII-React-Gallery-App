@@ -22,13 +22,17 @@ class App extends Component {
       queryTitle: "Results",
     };
   }
+
   componentDidMount() {
+    //load default pics
     this.performSearch();
+    //load pics for navigation pages
     this.performSearch("cats");
     this.performSearch("dogs");
     this.performSearch("computers");
   }
 
+  //fetch data, perform search and update state with queried data
   performSearch = (query = "Photos") => {
     axios
       .get(
@@ -52,7 +56,6 @@ class App extends Component {
   };
 
   render() {
-    console.log(this.state.queryTitle);
     return (
       <BrowserRouter>
         <SearchForm onSearch={this.performSearch} />

@@ -5,10 +5,12 @@ class SearchForm extends Component {
     searchText: "",
   };
 
+  //update searchText state as user enteres data
   onSearchChange = (e) => {
     this.setState({ searchText: e.target.value });
   };
 
+  //Set route back to home route and send searchText to performSearch and clear search bar
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.history.push("/");
