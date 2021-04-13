@@ -95,7 +95,11 @@ class App extends Component {
             path="/:searchText"
             render={(props) => {
               this.performSearch(props.match.params.searchText);
-              return (
+              return this.state.queryTitle !== props.match.params.searchText ? (
+                <h4>Loading...</h4>
+              ) : this.state.pictures.length < 1 ? (
+                <h4>{`Sorry! No matches found for ${props.match.params.searchText}`}</h4>
+              ) : (
                 <PhotoContainer
                   pictures={this.state.pictures}
                   title={this.state.queryTitle}
